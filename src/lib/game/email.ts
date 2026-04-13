@@ -63,11 +63,11 @@ export async function sendTargetEmail({
   );
 
   mailQueue.push({
-    from: 'game@pintag.thijs.gg',
-    replyTo: 'pintag2024@gmail.com',
+    from: 'lwhspintag2026@gmail.com',
+    replyTo: 'lwhspintag2026@gmail.com',
     sender: {
       name: 'LWHS PIN-TAG',
-      address: 'game@pintag.thijs.gg',
+      address: 'lwhspintag2026@gmail.com',
     },
     to: user.email,
     subject: !isRevival
@@ -101,11 +101,11 @@ export async function sendEliminationEmail({
   );
 
   mailQueue.push({
-    from: 'game@pintag.thijs.gg',
-    replyTo: 'pintag2024@gmail.com',
+    from: 'lwhspintag2026@gmail.com',
+    replyTo: 'lwhspintag2026@gmail.com',
     sender: {
       name: 'LWHS PIN-TAG',
-      address: 'game@pintag.thijs.gg',
+      address: 'lwhspintag2026@gmail.com',
     },
     to: user.email,
     subject: `YOU'VE BEEN ELIMINATED`,
