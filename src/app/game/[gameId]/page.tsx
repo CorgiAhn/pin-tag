@@ -10,8 +10,7 @@ import React, { use } from 'react';
 import TargetCard from './TargetCard';
 import { Participant, Prisma, User } from '@prisma/client';
 import GameCard from './GameCard';
-import { render } from 'jsx-email';
-import { Template } from '@/email/TargetEmail';
+
 import Link from 'next/link';
 
 function userToFullName(user?: User) {
