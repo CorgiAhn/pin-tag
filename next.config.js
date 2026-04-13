@@ -14,8 +14,9 @@ const nextConfig = {
   experimental: {
     esmExternals: false,
     serverActions: {
-      allowedOrigins: ['pintag.thijs.gg'],
+      allowedOrigins: ['pin-tag.vercel.app'],
     },
+    serverComponentsExternalPackages: ['jsx-email'],
   },
   images: {
     remotePatterns: [
