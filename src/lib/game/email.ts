@@ -1,13 +1,10 @@
 import nodemailer from 'nodemailer';
-import { render } from 'jsx-email';
-
-import { userAuth } from '@/lib/auth/hooks';
-import { Participant, Role, User } from '@prisma/client';
-import { Template as TargetEmail } from '@/email/TargetEmail';
-import { Template as EliminationEmail } from '@/email/EliminationEmail';
+import { renderTargetEmail } from '@/email/TargetEmail';
+import { renderEliminationEmail } from '@/email/EliminationEmail';
 import Mail from 'nodemailer/lib/mailer';
 import prisma from '../prisma';
 import { ThrottledQueue } from '../util/ThrottledQueue';
+import { User } from '@prisma/client';
 
 const transport = nodemailer.createTransport({
   service: 'gmail',
@@ -20,95 +17,40 @@ const transport = nodemailer.createTransport({
 const mailQueue = new ThrottledQueue<Mail.Options>({
   handler: async (data) => {
     console.log('Emailing', data.to);
-
     await transport.sendMail(data).catch((err) => {
-      console.error(
-        `[EMAIL ERROR] Failed to email ${data.to}.\n${err.message}\nRetrying in 30 seconds...`
-      );
-      setTimeout(() => {
-        mailQueue.push(data);
-      }, 30000);
+      console.error(`[EMAIL ERROR] Failed to email ${data.to}.\n${err.message}\nRetrying in 30 seconds...`);
+      setTimeout(() => { mailQueue.push(data); }, 30000);
     });
   },
   timeout: 250,
 });
 
-export async function sendTargetEmail({
-  user,
-  targetUser,
-  gameId,
-  isNew,
-  isRevival,
-}: {
-  user: User;
-  targetUser: User;
-  gameId: string;
-  isNew?: boolean;
-  isRevival?: boolean;
+export async function sendTargetEmail({ user, targetUser, gameId, isNew, isRevival }: {
+  user: User; targetUser: User; gameId: string; isNew?: boolean; isRevival?: boolean;
 }) {
-  const authToken = await prisma.authToken.findUnique({
-    where: { userId: user.id },
-  });
-
+  const authToken = await prisma.authToken.findUnique({ where: { userId: user.id } });
   const eliminationLink = `${process.env.BASE_URL}/api/auth/magic?t=${authToken?.token}&g=${gameId}&a=eliminate`;
-
-  const emailHtml = await render(
-    TargetEmail({
-      name: user.firstName,
-      target: targetUser,
-      eliminationLink,
-      isNew,
-      isRevival,
-    })
-  );
 
   mailQueue.push({
     from: 'lwhspintag2026@gmail.com',
     replyTo: 'lwhspintag2026@gmail.com',
-    sender: {
-      name: 'LWHS PIN-TAG',
-      address: 'lwhspintag2026@gmail.com',
-    },
     to: user.email,
-    subject: !isRevival
-      ? `YOUR ${isNew ? 'NEW' : ''} PIN-TAG TARGET`
-      : "YOU'VE BEEN REVIVED",
-    html: emailHtml,
+    subject: !isRevival ? `YOUR ${isNew ? 'NEW ' : ''}PIN-TAG TARGET` : "YOU'VE BEEN REVIVED",
+    html: renderTargetEmail({ name: user.firstName, target: targetUser, eliminationLink, isNew, isRevival }),
   });
 }
 
-export async function sendEliminationEmail({
-  user,
-  assassinUser,
-  gameId,
-}: {
-  user: User;
-  assassinUser?: User;
-  gameId: string;
+export async function sendEliminationEmail({ user, assassinUser, gameId }: {
+  user: User; assassinUser?: User; gameId: string;
 }) {
-  const authToken = await prisma.authToken.findUnique({
-    where: { userId: user.id },
-  });
-
+  const authToken = await prisma.authToken.findUnique({ where: { userId: user.id } });
   const eliminationLink = `${process.env.BASE_URL}/api/auth/magic?t=${authToken?.token}&g=${gameId}`;
-
-  const emailHtml = await render(
-    EliminationEmail({
-      name: user.firstName,
-      assassin: assassinUser,
-      eliminationLink,
-    })
-  );
 
   mailQueue.push({
     from: 'lwhspintag2026@gmail.com',
     replyTo: 'lwhspintag2026@gmail.com',
-    sender: {
-      name: 'LWHS PIN-TAG',
-      address: 'lwhspintag2026@gmail.com',
-    },
     to: user.email,
     subject: `YOU'VE BEEN ELIMINATED`,
-    html: emailHtml,
+    html: renderEliminationEmail({ name: user.firstName, assassin: assassinUser, eliminationLink }),
   });
 }
