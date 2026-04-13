@@ -53,7 +53,7 @@ export default async function RootLayout({
             </Link>
           </div>
           <div className="mt-2 text-gray-300 text-sm">
-            Email pintag2024@gmail.com for help.
+            Email lwhspintag2026@gmail.com for help.
           </div>
         </div>
       </body>
