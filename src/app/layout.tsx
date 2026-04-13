@@ -49,7 +49,7 @@ export default async function RootLayout({
               target="_blank"
               className="hover:underline"
             >
-              Thijs Simonian &apos;24
+              Thijs Simonian &apos;24 and horribly reused by Noah Ahn &apos;27
             </Link>
           </div>
           <div className="mt-2 text-gray-300 text-sm">
