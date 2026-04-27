@@ -1,12 +1,9 @@
 import { userAuth } from '@/lib/auth/hooks';
 import { getAvatarUrl } from '@/lib/game/hooks';
 import prisma from '@/lib/prisma';
-import { readFileSync } from 'fs';
 import { JetBrains_Mono } from 'next/font/google';
 import Image from 'next/image';
 import { ImageResponse } from 'next/og';
-import path from 'path';
-import { fileURLToPath } from 'url';
 // App router includes @vercel/og.
 // No need to install it.
 
@@ -51,12 +48,10 @@ export async function GET(
     1;
 
   // Import fonts
-  const boldFontData = readFileSync(
-    path.join(fileURLToPath(import.meta.url), '../assets/jetbrains_b.ttf')
-  );
-  const extraboldFontData = readFileSync(
-    path.join(fileURLToPath(import.meta.url), '../assets/jetbrains_eb.ttf')
-  );
+  const [boldFontData, extraboldFontData] = await Promise.all([
+    fetch('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjOsMgLg.woff2').then(r => r.arrayBuffer()),
+    fetch('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8SKljOsMgLg.woff2').then(r => r.arrayBuffer()),
+  ]);
 
   return new ImageResponse(
     (
