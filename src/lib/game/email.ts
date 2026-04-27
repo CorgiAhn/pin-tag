@@ -31,13 +31,14 @@ export async function sendTargetEmail({ user, targetUser, gameId, isNew, isReviv
   const authToken = await prisma.authToken.findUnique({ where: { userId: user.id } });
   const eliminationLink = `${process.env.BASE_URL}/api/auth/magic?t=${authToken?.token}&g=${gameId}&a=eliminate`;
 
-  mailQueue.push({
+  await transport.sendMail({
     from: 'lwhspintag2026@gmail.com',
     replyTo: 'lwhspintag2026@gmail.com',
     to: user.email,
     subject: !isRevival ? `YOUR ${isNew ? 'NEW ' : ''}PIN-TAG TARGET` : "YOU'VE BEEN REVIVED",
     html: renderTargetEmail({ name: user.firstName, target: targetUser, eliminationLink, isNew, isRevival }),
   });
+
 }
 
 export async function sendEliminationEmail({ user, assassinUser, gameId }: {
@@ -46,7 +47,7 @@ export async function sendEliminationEmail({ user, assassinUser, gameId }: {
   const authToken = await prisma.authToken.findUnique({ where: { userId: user.id } });
   const eliminationLink = `${process.env.BASE_URL}/api/auth/magic?t=${authToken?.token}&g=${gameId}`;
 
-  mailQueue.push({
+  await transport.sendMail({
     from: 'lwhspintag2026@gmail.com',
     replyTo: 'lwhspintag2026@gmail.com',
     to: user.email,
