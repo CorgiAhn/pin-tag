@@ -32,8 +32,8 @@ export async function sendTargetEmail({ user, targetUser, gameId, isNew, isReviv
   const eliminationLink = `${process.env.BASE_URL}/api/auth/magic?t=${authToken?.token}&g=${gameId}&a=eliminate`;
 
   await transport.sendMail({
-    from: 'lwhspintag2026@gmail.com',
-    replyTo: 'lwhspintag2026@gmail.com',
+    from: 'pintag2026.2@gmail.com',
+    replyTo: 'pintag2026.2@gmail.com',
     to: user.email,
     subject: !isRevival ? `YOUR ${isNew ? 'NEW ' : ''}PIN-TAG TARGET` : "YOU'VE BEEN REVIVED",
     html: renderTargetEmail({ name: user.firstName, target: targetUser, eliminationLink, isNew, isRevival }),
@@ -48,8 +48,8 @@ export async function sendEliminationEmail({ user, assassinUser, gameId }: {
   const eliminationLink = `${process.env.BASE_URL}/api/auth/magic?t=${authToken?.token}&g=${gameId}`;
 
   await transport.sendMail({
-    from: 'lwhspintag2026@gmail.com',
-    replyTo: 'lwhspintag2026@gmail.com',
+    from: 'pintag2026.2@gmail.com',
+    replyTo: 'pintag2026.2@gmail.com',
     to: user.email,
     subject: `YOU'VE BEEN ELIMINATED`,
     html: renderEliminationEmail({ name: user.firstName, assassin: assassinUser, eliminationLink }),
