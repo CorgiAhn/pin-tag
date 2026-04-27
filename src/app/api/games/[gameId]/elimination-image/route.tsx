@@ -49,8 +49,18 @@ export async function GET(
 
   // Import fonts
   const [boldFontData, extraboldFontData] = await Promise.all([
-    fetch('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8yKxjOsMgLg.woff2').then(r => r.arrayBuffer()),
-    fetch('https://fonts.gstatic.com/s/jetbrainsmono/v18/tDbY2o-flEEny0FZhsfKu5WU4zr3E_BX0PnT8RD8SKljOsMgLg.woff2').then(r => r.arrayBuffer()),
+    fetch('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700')
+      .then(r => r.text())
+      .then(css => {
+        const url = css.match(/url\((.+?)\)/)?.[1];
+        return fetch(url!).then(r => r.arrayBuffer());
+      }),
+    fetch('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800')
+      .then(r => r.text())
+      .then(css => {
+        const url = css.match(/url\((.+?)\)/)?.[1];
+        return fetch(url!).then(r => r.arrayBuffer());
+      }),
   ]);
 
   return new ImageResponse(
