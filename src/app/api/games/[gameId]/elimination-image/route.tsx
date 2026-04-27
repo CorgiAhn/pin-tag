@@ -191,7 +191,7 @@ export async function GET(
               fontSize: '36px',
             }}
           >
-            PINTAG &apos;24
+            PINTAG &apos;26
           </div>
         </div>
       </div>
