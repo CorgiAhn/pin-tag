@@ -137,8 +137,8 @@ export default async function GamePage({
                     a revival round!
                   </GameCard>
                   <div className="flex-grow">
-                    <Image
-                      src={`/api/games/${game.id}/elimination-image?user=${user.id}`}
+                    <img
+                      src={`/api/games/${game.id}/elimination-image`}
                       className="sm:w-auto w-full border-dashed border-2 border-white"
                       width={300}
                       height={530}
