@@ -125,5 +125,5 @@ export async function getLatestPins(gameId: string) {}
 
 export function getAvatarUrl(avatarId?: string | null) {
   if (avatarId == null) return null;
-  return `https://bbk12e1-cdn.myschoolcdn.com/ftpimages/200/user/${avatarId}?resize=200,200`;
+  return `https://bbk12e1-cdn.myschoolcdn.com/ftpimages/200/user/${avatarId}.jpg?resize=200,200`;
 }
